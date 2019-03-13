@@ -35,7 +35,7 @@ wd_items_ids = dict()
 ## Iterate over the pandas dataframe
 
 for i, row in df.iterrows():
-    if i>2:
+    if i>10:
         continue ### set a limit to 10 edits while in the bot approval request
 
     taxon_id = row["taxon_id"]
