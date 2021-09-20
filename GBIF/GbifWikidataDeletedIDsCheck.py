@@ -1,5 +1,6 @@
 import pandas
 from wikidataintegrator import wdi_core
+import requests
 
 query = """
 SELECT * WHERE {
@@ -7,7 +8,7 @@ SELECT * WHERE {
 }
 """
 dataWikidata = wdi_core.WDFunctionsEngine.execute_sparql_query(query=query, as_dataframe=True)
-dataGBIF = pandas.read_csv("deleted_taxa_gbif_backbone.csv", delimiter='\t')
+dataGBIF = pandas.read_csv("http://download.gbif.org/custom_download/mgrosjean/deleted_taxa_gbif_backbone.csv", delimiter='\t')
 
 result=dataWikidata.assign(gbifIDcheck=dataWikidata.gbifTaxonId.isin(dataGBIF.taxon_key).astype(int))
 
