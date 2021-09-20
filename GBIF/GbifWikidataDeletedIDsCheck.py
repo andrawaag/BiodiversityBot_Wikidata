@@ -1,7 +1,12 @@
-import pandas 
+import pandas
+from wikidataintegrator import wdi_core
 
-
-dataWikidata = pandas.read_csv("Wikidata_GBIF_speciesIDs.csv", delimiter=',')
+query = """
+SELECT * WHERE {
+   ?item wdt:P846 ?gbifTaxonId .
+}
+"""
+dataWikidata = wdi_core.WDFunctionsEngine.execute_sparql_query(query=query, as_dataframe=True)
 dataGBIF = pandas.read_csv("deleted_taxa_gbif_backbone.csv", delimiter='\t')
 
 result=dataWikidata.assign(gbifIDcheck=dataWikidata.gbifTaxonId.isin(dataGBIF.taxon_key).astype(int))
@@ -9,3 +14,4 @@ result=dataWikidata.assign(gbifIDcheck=dataWikidata.gbifTaxonId.isin(dataGBIF.ta
 deletedIDs = result['gbifIDcheck'].value_counts()[1]
 print("GBIF species ID that are deleted but linked on wikidata:", deletedIDs)
 print(result)
+print(dataWikidata)
